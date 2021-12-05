@@ -1,25 +1,45 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState, useRef } from "react";
+import { useSpring, Transition, config, animated } from "react-spring";
 
-function App() {
+export default function App() {
+  const [toogle, setToogle] = useState(false);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Transition
+      items={toogle}
+      from={{ opacity: 0 }}
+      enter={{ opacity: 1 }}
+      leave={{ opacity: 0 }}
+      reverse={toogle}
+      delay={200}
+      config={config.molasses}
+      onRest={() =>
+        setToogle({
+          toggle: !toogle,
+        })
+      }
+    >
+      {({ opacity }, item) =>
+        item ? (
+          <animated.div
+            style={{
+              position: "absolute",
+              opacity: opacity.to({ range: [0.0, 1.0], output: [0, 1] }),
+            }}
+          >
+            😄
+          </animated.div>
+        ) : (
+          <animated.div
+            style={{
+              position: "absolute",
+              opacity: opacity.to({ range: [1.0, 0.0], output: [0, 1] }),
+            }}
+          >
+            🤪 final
+          </animated.div>
+        )
+      }
+    </Transition>
   );
 }
-
-export default App;
